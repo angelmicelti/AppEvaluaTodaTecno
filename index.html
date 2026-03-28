@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación en Tecnología</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --accent-color: #38bdf8;
+            --text-color: #f8fafc;
+            --card-bg: rgba(30, 41, 59, 0.9);
+            --transition-speed: 0.3s;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: radial-gradient(circle at top right, #1e293b, #0f172a);
+            color: var(--text-color);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; 
+            touch-action: none; 
+        }
+
+        header {
+            padding: 1.5rem 1rem;
+            text-align: center;
+            z-index: 20;
+        }
+
+        h1 {
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--accent-color);
+            text-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+            margin-bottom: 0;
+        }
+
+        .viewport {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .rosco-wrapper {
+            position: relative;
+            width: 85vw;
+            height: 85vw;
+            max-width: 550px;
+            max-height: 550px;
+            cursor: grab;
+        }
+
+        .rosco-wrapper:active {
+            cursor: grabbing;
+        }
+
+        .rosco-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 38%;
+            height: 38%;
+            background: rgba(15, 23, 42, 0.85);
+            border: 2px solid var(--accent-color);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 0 50px rgba(56, 189, 248, 0.2), inset 0 0 20px rgba(56, 189, 248, 0.1);
+            text-align: center;
+            padding: 20px;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .center-icon {
+            font-size: 2rem;
+            color: var(--accent-color);
+            margin-bottom: 8px;
+            filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.5));
+            transition: transform 0.3s ease;
+        }
+
+        .center-text {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-color);
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        .rosco-item {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            padding: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            transition: transform 0.1s ease-out, background 0.3s, box-shadow 0.3s, border-color 0.3s;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        .rosco-item.active {
+            z-index: 100;
+            background: var(--accent-color);
+            color: var(--bg-color);
+            border-color: white;
+            box-shadow: 0 0 40px var(--accent-color);
+            font-weight: 700;
+            transform: scale(1.3) !important;
+        }
+
+        @media (max-width: 576px) {
+            .rosco-item {
+                width: 80px;
+                height: 80px;
+                font-size: 0.65rem;
+            }
+            h1 { font-size: 1.4rem; }
+            .center-icon { font-size: 1.5rem; }
+            .center-text { font-size: 0.7rem; }
+        }
+
+        .instructions {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.4);
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>EVALUACIÓN EN TECNOLOGÍA</h1>
+    </header>
+
+    <main class="viewport">
+        <div class="rosco-wrapper" id="roscoWrapper">
+            <div class="rosco-center">
+                <i id="centerIcon" class="bi bi-arrows-move center-icon"></i>
+                <div id="activeLabel" class="center-text">Gira para explorar</div>
+            </div>
+            
+            <div id="itemsContainer">
+                <a href="https://angelmicelti.github.io/AppCalificaActividadesTEC4/" class="rosco-item" target="_blank" data-label="Califica Actividades TEC4" data-icon="bi-check2-square">
+                    Evalúa TEC4
+                </a>
+                <a href="https://angelmicelti.github.io/AppCalificaActividadesMateriaGeneral/" class="rosco-item" target="_blank" data-label="Califica Materia General" data-icon="bi-journal-check">
+                    Evalúa MATERIA
+                </a>
+                <a href="https://angelmicelti.github.io/TEC4EvalInic" class="rosco-item" target="_blank" data-label="Evaluación Inicial TEC4" data-icon="bi-flag">
+                    Evaluación Inicial TEC4
+                </a>
+                <a href="https://angelmicelti.github.io/EvalCompEspTEC4" class="rosco-item" target="_blank" data-label="Competencias Específicas TEC4" data-icon="bi-star">
+                    Competencias Específicas
+                </a>
+                <a href="https://angelmicelti.github.io/RubricasTecno" class="rosco-item" target="_blank" data-label="Rúbricas Materias Tecno" data-icon="bi-table">
+                    Rúbricas materias Departamento
+                </a>
+                <a href="https://angelmicelti.github.io/ISUStoPRA" class="rosco-item" target="_blank" data-label="De ISUS a PRA" data-icon="bi-arrow-right-circle">
+                    ISUS → PRA
+                </a>
+                <a href="https://angelmicelti.github.io/AppSeguimientoPRA" class="rosco-item" target="_blank" data-label="Seguimiento de PRA" data-icon="bi-clipboard-data">
+                    Seguimiento de PRA
+                </a>
+            </div>
+        </div>
+        <div class="instructions">Usa el ratón o el dedo para girar el selector</div>
+    </main>
+
+    <script>
+        // Registro del Service Worker para PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('Service Worker registrado', reg))
+                    .catch(err => console.log('Error registrando Service Worker', err));
+            });
+        }
+
+        const wrapper = document.getElementById('roscoWrapper');
+        const items = document.querySelectorAll('.rosco-item');
+        const activeLabel = document.getElementById('activeLabel');
+        const centerIcon = document.getElementById('centerIcon');
+        
+        let currentRotation = 0;
+        let isDragging = false;
+        let startAngle = 0;
+        let lastIcon = '';
+
+        const totalItems = items.length;
+        const itemAngleStep = (Math.PI * 2) / totalItems;
+
+        function getAngle(clientX, clientY) {
+            const rect = wrapper.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            return Math.atan2(clientY - centerY, clientX - centerX);
+        }
+
+        function updatePositions() {
+            const rect = wrapper.getBoundingClientRect();
+            const radius = rect.width / 2.5;
+
+            let closestItem = null;
+            let minAngleDiff = Infinity;
+
+            items.forEach((item, index) => {
+                const angle = (index * itemAngleStep) + currentRotation - (Math.PI / 2);
+                const x = Math.cos(angle) * radius;
+                const y = Math.sin(angle) * radius;
+
+                item.style.left = `calc(50% + ${x}px - ${item.offsetWidth / 2}px)`;
+                item.style.top = `calc(50% + ${y}px - ${item.offsetHeight / 2}px)`;
+
+                const normalizedAngle = ((angle + Math.PI / 2) % (Math.PI * 2) + (Math.PI * 2)) % (Math.PI * 2);
+                const diff = Math.min(normalizedAngle, Math.PI * 2 - normalizedAngle);
+
+                if (diff < minAngleDiff) {
+                    minAngleDiff = diff;
+                    closestItem = item;
+                }
+                item.classList.remove('active');
+            });
+
+            if (closestItem) {
+                closestItem.classList.add('active');
+                const label = closestItem.getAttribute('data-label');
+                const iconClass = closestItem.getAttribute('data-icon');
+                activeLabel.textContent = label;
+                if (lastIcon !== iconClass) {
+                    centerIcon.className = `bi ${iconClass} center-icon`;
+                    lastIcon = iconClass;
+                    centerIcon.style.transform = 'scale(1.2)';
+                    setTimeout(() => centerIcon.style.transform = 'scale(1)', 200);
+                }
+            }
+        }
+
+        function handleStart(e) {
+            isDragging = true;
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            startAngle = getAngle(clientX, clientY) - currentRotation;
+        }
+
+        function handleMove(e) {
+            if (!isDragging) return;
+            if (e.cancelable) e.preventDefault();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            const newAngle = getAngle(clientX, clientY);
+            currentRotation = newAngle - startAngle;
+            requestAnimationFrame(updatePositions);
+        }
+
+        function handleEnd() { isDragging = false; }
+
+        wrapper.addEventListener('mousedown', handleStart);
+        window.addEventListener('mousemove', handleMove);
+        window.addEventListener('mouseup', handleEnd);
+        wrapper.addEventListener('touchstart', handleStart);
+        window.addEventListener('touchmove', handleMove, { passive: false });
+        window.addEventListener('touchend', handleEnd);
+        window.addEventListener('resize', updatePositions);
+        updatePositions();
+    </script>
+</body>
+</html>
