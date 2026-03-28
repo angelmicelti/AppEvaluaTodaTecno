@@ -1,6 +1,6 @@
-const CACHE_NAME = 'eval-tecno-v1';
+const CACHE_NAME = 'eval-todatecno-v1.1';
 const ASSETS = [
-  './AppEvaluacionTodas.html',
+  './index.html',
   './manifest.json',
   'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css',
   'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css',
