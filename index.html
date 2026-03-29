@@ -5,14 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Evaluación en Tecnología</title>
     
+    <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#0f172a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
     <link rel="manifest" href="manifest.json">
 
+    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
@@ -207,21 +211,14 @@
     </main>
 
     <script>
-        /** * REGISTRO DEL SERVICE WORKER
-         * Asegúrate de que sw.js esté en la raíz junto a este archivo.
-         */
+        // Registro del Service Worker para PWA
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('Service Worker operativo:', reg.scope))
-                    .catch(err => console.log('Error en Service Worker:', err));
+                    .then(reg => console.log('Service Worker registrado', reg))
+                    .catch(err => console.log('Error registrando Service Worker', err));
             });
         }
-
-        /** * DETECCIÓN DE MODO PWA
-         * Ayuda a ajustar comportamientos si la app ya está instalada.
-         */
-        const isPWA = window.matchMedia('(display-mode: standalone)').matches;
 
         const wrapper = document.getElementById('roscoWrapper');
         const items = document.querySelectorAll('.rosco-item');
@@ -235,20 +232,6 @@
 
         const totalItems = items.length;
         const itemAngleStep = (Math.PI * 2) / totalItems;
-
-        /**
-         * MANEJO DE CLICS
-         * Forzamos la apertura externa para que el SO pueda interceptar la URL
-         * si existe una PWA instalada para ese destino.
-         */
-        items.forEach(item => {
-            item.addEventListener('click', (e) => {
-                const url = item.getAttribute('href');
-                console.log(`Navegando a: ${url}`);
-                // Dejamos que el comportamiento por defecto (target="_blank") 
-                // ayude al sistema a decidir si abre el navegador o la App.
-            });
-        });
 
         function getAngle(clientX, clientY) {
             const rect = wrapper.getBoundingClientRect();
@@ -287,7 +270,6 @@
                 const label = closestItem.getAttribute('data-label');
                 const iconClass = closestItem.getAttribute('data-icon');
                 activeLabel.textContent = label;
-                
                 if (lastIcon !== iconClass) {
                     centerIcon.className = `bi ${iconClass} center-icon`;
                     lastIcon = iconClass;
@@ -297,7 +279,6 @@
             }
         }
 
-        // Eventos de Interacción
         function handleStart(e) {
             isDragging = true;
             const clientX = e.touches ? e.touches[0].clientX : e.clientX;
@@ -324,8 +305,6 @@
         window.addEventListener('touchmove', handleMove, { passive: false });
         window.addEventListener('touchend', handleEnd);
         window.addEventListener('resize', updatePositions);
-        
-        // Inicialización
         updatePositions();
     </script>
 </body>
