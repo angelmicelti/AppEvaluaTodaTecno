@@ -1,4 +1,4 @@
-const CACHE_NAME = 'eval-todatecno-v1.5';
+const CACHE_NAME = 'eval-todatecno-v1.4';
 const ASSETS = [
   './',
   './index.html',
